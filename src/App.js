@@ -8,7 +8,7 @@ function App() {
     <>
     {/* <LandingPage/> */}
     <Home/>
-    {/* <Footer/> */}
+    <Footer/>
     </>
   );
 }
