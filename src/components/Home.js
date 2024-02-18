@@ -3,14 +3,22 @@ import Scholarship from "./Scholarship";
 import React, { useContext, useEffect } from "react";
 import axios from "axios";
 import { ScholarshipContext } from "../context/main";
-
+import ScholarshipDetail from "./ScholarshipDetail"
 export default function Home() {
-  const  scholarshipsContext  = useContext(ScholarshipContext);
-  // const [scholarships, setScholarships] = React.useState([]);
+  const scholarshipsContext = useContext(ScholarshipContext);
+  const [pageNo, setPageNo] = React.useState(1);
+  const handleNextPageClick = () => {
+    setPageNo((pageNo) => pageNo + 1);
+    scholarshipsContext.nextPage();
+  };
+  const handlePrePageClick = () => {
+    setPageNo((pageNo) => pageNo - 1);
+    scholarshipsContext.prePage();
+  };
+
   useEffect(() => {
     const fetchData = async () => {
-      const url =
-        `https://api.myscheme.gov.in/search/v4/schemes?lang=en&keyword=&sort=&from=${scholarshipsContext.index}&size=10`;
+      const url = `https://api.myscheme.gov.in/search/v4/schemes?lang=en&keyword=&sort=&from=${scholarshipsContext.index}&size=10`;
 
       const headers = {
         Accept: "application/json, text/plain, */*",
@@ -32,8 +40,11 @@ export default function Home() {
         // const data = {}
         const response = await axios.get(url, { headers });
         console.log(response.data["data"]["hits"]["items"]);
-        scholarshipsContext.handleScholarships(response.data["data"]["hits"]["items"]);
-        console.log(scholarshipsContext.index)
+        scholarshipsContext.handleScholarships(
+          response.data["data"]["hits"]["items"]
+        );
+        
+        console.log(response.data["data"]["hits"]["items"]);
       } catch (error) {
         console.error("Error fetching scheme data:", error);
       }
@@ -175,80 +186,75 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div class="flex bg-blue-50">
+      <div class="flex bg-blue-50 h-1/3">
         <div class="flex-shrink-0 w-1/3 p-4 ">
-        {scholarshipsContext.scholarships && (
-  <Scholarship scholarships={scholarshipsContext.scholarships} />
-)}
-          <ol className="flex justify-center gap-1 text-xs font-medium">
-          <li>
-            <a
-              href="#"
-              className="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180"
-              onClick={scholarshipsContext.prePage}
-            >
-              <span className="sr-only">Prev Page</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-3 w-3"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </a>
-          </li>
-
-          <li>
-            <a
-              href="#"
-              className="block size-8 rounded border border-gray-100 bg-white text-center leading-8 text-gray-900"
-            >
-              1
-            </a>
-          </li>
-
+        <div class="overflow-y-auto max-h-screen">
+          {scholarshipsContext.scholarships && (
+            <Scholarship scholarships={scholarshipsContext.scholarships} />
+          )}
           
-
-          <li>
-            <a
-              href="#"
-              className="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180"
-              onClick={()=>scholarshipsContext.nextPage()}
-            >
-              <span className="sr-only">Next Page</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-3 w-3"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+          </div>
+          <ol className="flex justify-center gap-1 text-xs font-medium pt-2">
+            <li>
+              <div
+                href="#"
+                className="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180 cursor-pointer"
+                onClick={handlePrePageClick}
               >
-                <path
-                  fillRule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </a>
-          </li>
-        </ol>
+                <span className="sr-only">Prev Page</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-3 w-3"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            </li>
+
+            <li>
+              <div
+                
+                className="block size-8 rounded border border-gray-100 bg-white text-center leading-8 text-gray-900"
+              >
+                {pageNo}
+              </div>
+            </li>
+
+            <li>
+              <div
+                
+                className="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180 cursor-pointer"
+                onClick={handleNextPageClick}
+              >
+                <span className="sr-only">Next Page</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-3 w-3"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            </li>
+          </ol>
         </div>
-        
 
         {/* <!-- Right Section --> */}
         <div class="flex-shrink-0 w-2/3 p-4 ">
           <div class="overflow-y-auto max-h-screen">
-            {/* <!-- Content for right section --> */}
-            <h2 class="text-lg font-semibold mb-4">Right Section</h2>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit nemo
-            excepturi mollitia nostrum necessitatibus nihil assumenda asperiores
-            quasi quisquam odio, quod autem est ipsa quas nobis at qui dolorum
-            incidunt.
-            {/* <!-- Add more content here --> */}
+            <ScholarshipDetail/>
+            
           </div>
         </div>
       </div>
