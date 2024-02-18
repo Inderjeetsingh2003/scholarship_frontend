@@ -1,5 +1,5 @@
 import './App.css';
-import './components/LandingPage'
+// import './components/LandingPage'
 import LandingPage from './components/LandingPage';
 import Footer from './components/Footer';
 import Home from './components/Home';

@@ -1,6 +1,47 @@
 import Header from "./Header";
+import Scholarship from "./Scholarship";
+import React, { useContext, useEffect } from "react";
+import axios from "axios";
+import { ScholarshipContext } from "../context/main";
 
 export default function Home() {
+  const  scholarshipsContext  = useContext(ScholarshipContext);
+  // const [scholarships, setScholarships] = React.useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const url =
+        `https://api.myscheme.gov.in/search/v4/schemes?lang=en&keyword=&sort=&from=${scholarshipsContext.index}&size=10`;
+
+      const headers = {
+        Accept: "application/json, text/plain, */*",
+        "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8,gu;q=0.7",
+        Origin: "https://www.myscheme.gov.in",
+        "Sec-Ch-Ua":
+          '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
+        "Sec-Ch-Ua-Mobile": "?1",
+        "Sec-Ch-Ua-Platform": '"Android"',
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-site",
+        "User-Agent":
+          "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36",
+        "X-Api-Key": "tYTy5eEhlu9rFjyxuCr7ra7ACp4dv1RH8gWuHTDc",
+      };
+
+      try {
+        // const data = {}
+        const response = await axios.get(url, { headers });
+        console.log(response.data["data"]["hits"]["items"]);
+        scholarshipsContext.handleScholarships(response.data["data"]["hits"]["items"]);
+        console.log(scholarshipsContext.index)
+      } catch (error) {
+        console.error("Error fetching scheme data:", error);
+      }
+    };
+
+    fetchData();
+  }, [scholarshipsContext.index]); // Empty dependency array ensures the effect runs only once on mount
+
   return (
     <div className="font-sans">
       <Header />
@@ -50,7 +91,7 @@ export default function Home() {
               Age
             </a>
           </div>
-          
+
           <div
             type="button"
             class="group flex shrink-0 items-center rounded-lg transition"
@@ -73,8 +114,7 @@ export default function Home() {
               Residence
             </a>
           </div>
-          
-          
+
           <div
             type="button"
             class="group flex shrink-0 items-center rounded-lg transition"
@@ -137,177 +177,67 @@ export default function Home() {
       </div>
       <div class="flex bg-blue-50">
         <div class="flex-shrink-0 w-1/3 p-4 ">
-          <div class="overflow-y-auto max-h-screen">
-            <div className="p-4 bg-gray-100 rounded-lg m-2">
-              <div className="text-sm font-light">
-                Ministry of Electronics and Information Technology
-              </div>
-              <div className="text-lg font-bold text-indigo-600">
-                Niramaya Health Insurance Scheme
-              </div>
-              <div className="text-m pt-2 font-medium line-clamp-3 ">
-                Niramaya Health Insurance Scheme ,launched by the Department of
-                Empowerment of Persons with Disabilities, aims to provide
-                affordable health insurance to the Persons with Disabilities
-                (PwDs).
-              </div>
-            </div>
-            <div className="p-4 bg-gray-100 rounded-lg m-2">
-              <div className="text-sm font-light">
-                Ministry of Electronics and Information Technology
-              </div>
-              <div className="text-lg font-bold text-indigo-600">
-                Niramaya Health Insurance Scheme
-              </div>
-              <div className="text-m pt-2 font-medium line-clamp-3">
-                Niramaya Health Insurance Scheme ,launched by the Department of
-                Empowerment of Persons with Disabilities, aims to provide
-                affordable health insurance to the Persons with Disabilities
-                (PwDs).
-              </div>
-            </div>
-            <div className="p-4 bg-gray-100 rounded-lg m-2">
-              <div className="text-sm font-light">
-                Ministry of Electronics and Information Technology
-              </div>
-              <div className="text-lg font-bold text-indigo-600">
-                Niramaya Health Insurance Scheme
-              </div>
-              <div className="text-m pt-2 font-medium line-clamp-3">
-                Niramaya Health Insurance Scheme ,launched by the Department of
-                Empowerment of Persons with Disabilities, aims to provide
-                affordable health insurance to the Persons with Disabilities
-                (PwDs).
-              </div>
-            </div>
-            <div className="p-4 bg-gray-100 rounded-lg m-2">
-              <div className="text-sm font-light">
-                Ministry of Electronics and Information Technology
-              </div>
-              <div className="text-lg font-bold text-indigo-600">
-                Niramaya Health Insurance Scheme
-              </div>
-              <div className="text-m pt-2 font-medium line-clamp-3">
-                Niramaya Health Insurance Scheme ,launched by the Department of
-                Empowerment of Persons with Disabilities, aims to provide
-                affordable health insurance to the Persons with Disabilities
-                (PwDs).
-              </div>
-            </div>
-            <div className="p-4 bg-gray-100 rounded-lg m-2">
-              <div className="text-sm font-light">
-                Ministry of Electronics and Information Technology
-              </div>
-              <div className="text-lg font-bold text-indigo-600">
-                Niramaya Health Insurance Scheme
-              </div>
-              <div className="text-m pt-2 font-medium line-clamp-3">
-                Niramaya Health Insurance Scheme ,launched by the Department of
-                Empowerment of Persons with Disabilities, aims to provide
-                affordable health insurance to the Persons with Disabilities
-                (PwDs).
-              </div>
-            </div>
-            <div className="p-4 bg-gray-100 rounded-lg m-2">
-              <div className="text-sm font-light">
-                Ministry of Electronics and Information Technology
-              </div>
-              <div className="text-lg font-bold text-indigo-600">
-                Niramaya Health Insurance Scheme
-              </div>
-              <div className="text-m pt-2 font-medium line-clamp-3">
-                Niramaya Health Insurance Scheme ,launched by the Department of
-                Empowerment of Persons with Disabilities, aims to provide
-                affordable health insurance to the Persons with Disabilities
-                (PwDs).
-              </div>
-            </div>
-            <div className="p-4 bg-gray-100 rounded-lg m-2">
-              <div className="text-sm font-light">
-                Ministry of Electronics and Information Technology
-              </div>
-              <div className="text-lg font-bold text-indigo-600">
-                Niramaya Health Insurance Scheme
-              </div>
-              <div className="text-m pt-2 font-medium line-clamp-3">
-                Niramaya Health Insurance Scheme ,launched by the Department of
-                Empowerment of Persons with Disabilities, aims to provide
-                affordable health insurance to the Persons with Disabilities
-                (PwDs).
-              </div>
-            </div>
-            <div className="p-4 bg-gray-100 rounded-lg m-2">
-              <div className="text-sm font-light">
-                Ministry of Electronics and Information Technology
-              </div>
-              <div className="text-lg font-bold text-indigo-600">
-                Niramaya Health Insurance Scheme
-              </div>
-              <div className="text-m pt-2 font-medium line-clamp-3">
-                Niramaya Health Insurance Scheme ,launched by the Department of
-                Empowerment of Persons with Disabilities, aims to provide
-                affordable health insurance to the Persons with Disabilities
-                (PwDs).
-              </div>
-            </div>
-            <div className="p-4 bg-gray-100 rounded-lg m-2">
-              <div className="text-sm font-light">
-                Ministry of Electronics and Information Technology
-              </div>
-              <div className="text-lg font-bold text-indigo-600">
-                Niramaya Health Insurance Scheme
-              </div>
-              <div className="text-m pt-2 font-medium line-clamp-3">
-                Niramaya Health Insurance Scheme ,launched by the Department of
-                Empowerment of Persons with Disabilities, aims to provide
-                affordable health insurance to the Persons with Disabilities
-                (PwDs).
-              </div>
-            </div>
-            <div className="p-4 bg-gray-100 rounded-lg m-2">
-              <div className="text-sm font-light">
-                Ministry of Electronics and Information Technology
-              </div>
-              <div className="text-lg font-bold text-indigo-600">
-                Niramaya Health Insurance Scheme
-              </div>
-              <div className="text-m pt-2 font-medium line-clamp-3">
-                Niramaya Health Insurance Scheme ,launched by the Department of
-                Empowerment of Persons with Disabilities, aims to provide
-                affordable health insurance to the Persons with Disabilities
-                (PwDs).
-              </div>
-            </div>
-            <div className="p-4 bg-gray-100 rounded-lg m-2">
-              <div className="text-sm font-light">
-                Ministry of Electronics and Information Technology
-              </div>
-              <div className="text-lg font-bold text-indigo-600">
-                Niramaya Health Insurance Scheme
-              </div>
-              <div className="text-m pt-2 font-medium line-clamp-3">
-                Niramaya Health Insurance Scheme ,launched by the Department of
-                Empowerment of Persons with Disabilities, aims to provide
-                affordable health insurance to the Persons with Disabilities
-                (PwDs).
-              </div>
-            </div>
-            <div className="p-4 bg-gray-100 rounded-lg m-2">
-              <div className="text-sm font-light">
-                Ministry of Electronics and Information Technology
-              </div>
-              <div className="text-lg font-bold text-indigo-600">
-                Niramaya Health Insurance Scheme
-              </div>
-              <div className="text-m pt-2 font-medium line-clamp-3">
-                Niramaya Health Insurance Scheme ,launched by the Department of
-                Empowerment of Persons with Disabilities, aims to provide
-                affordable health insurance to the Persons with Disabilities
-                (PwDs).
-              </div>
-            </div>
-          </div>
+        {scholarshipsContext.scholarships && (
+  <Scholarship scholarships={scholarshipsContext.scholarships} />
+)}
+          <ol className="flex justify-center gap-1 text-xs font-medium">
+          <li>
+            <a
+              href="#"
+              className="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180"
+              onClick={scholarshipsContext.prePage}
+            >
+              <span className="sr-only">Prev Page</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-3 w-3"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="#"
+              className="block size-8 rounded border border-gray-100 bg-white text-center leading-8 text-gray-900"
+            >
+              1
+            </a>
+          </li>
+
+          
+
+          <li>
+            <a
+              href="#"
+              className="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180"
+              onClick={()=>scholarshipsContext.nextPage()}
+            >
+              <span className="sr-only">Next Page</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-3 w-3"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </a>
+          </li>
+        </ol>
         </div>
+        
 
         {/* <!-- Right Section --> */}
         <div class="flex-shrink-0 w-2/3 p-4 ">
