@@ -1,55 +1,56 @@
 import Header from "./Header";
 import Scholarship from "./Scholarship";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { ScholarshipContext } from "../context/main";
 import ScholarshipDetail from "./ScholarshipDetail"
 export default function Home() {
   const scholarshipsContext = useContext(ScholarshipContext);
   const [pageNo, setPageNo] = React.useState(1);
+  const [totalScholarships, setTotalScholarships] = useState(null)
   const handleNextPageClick = () => {
     setPageNo((pageNo) => pageNo + 1);
     scholarshipsContext.nextPage();
   };
   const handlePrePageClick = () => {
+    if (pageNo != 1){
     setPageNo((pageNo) => pageNo - 1);
-    scholarshipsContext.prePage();
+    scholarshipsContext.prePage();}
   };
+  const fetchData = async () => {
+    const url = `https://api.myscheme.gov.in/search/v4/schemes?lang=en&keyword=&sort=&from=${scholarshipsContext.index}&size=10`;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const url = `https://api.myscheme.gov.in/search/v4/schemes?lang=en&keyword=&sort=&from=${scholarshipsContext.index}&size=10`;
-
-      const headers = {
-        Accept: "application/json, text/plain, */*",
-        "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8,gu;q=0.7",
-        Origin: "https://www.myscheme.gov.in",
-        "Sec-Ch-Ua":
-          '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
-        "Sec-Ch-Ua-Mobile": "?1",
-        "Sec-Ch-Ua-Platform": '"Android"',
-        "Sec-Fetch-Dest": "empty",
-        "Sec-Fetch-Mode": "cors",
-        "Sec-Fetch-Site": "same-site",
-        "User-Agent":
-          "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36",
-        "X-Api-Key": "tYTy5eEhlu9rFjyxuCr7ra7ACp4dv1RH8gWuHTDc",
-      };
-
-      try {
-        // const data = {}
-        const response = await axios.get(url, { headers });
-        console.log(response.data["data"]["hits"]["items"]);
-        scholarshipsContext.handleScholarships(
-          response.data["data"]["hits"]["items"]
-        );
-        
-        console.log(response.data["data"]["hits"]["items"]);
-      } catch (error) {
-        console.error("Error fetching scheme data:", error);
-      }
+    const headers = {
+      Accept: "application/json, text/plain, */*",
+      "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8,gu;q=0.7",
+      Origin: "https://www.myscheme.gov.in",
+      "Sec-Ch-Ua":
+        '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
+      "Sec-Ch-Ua-Mobile": "?1",
+      "Sec-Ch-Ua-Platform": '"Android"',
+      "Sec-Fetch-Dest": "empty",
+      "Sec-Fetch-Mode": "cors",
+      "Sec-Fetch-Site": "same-site",
+      "User-Agent":
+        "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36",
+      "X-Api-Key": "tYTy5eEhlu9rFjyxuCr7ra7ACp4dv1RH8gWuHTDc",
     };
 
+    try {
+      // const data = {}
+      const response = await axios.get(url, { headers });
+      console.log(response.data["data"]["hits"]["items"]);
+      scholarshipsContext.handleScholarships(
+        response.data["data"]["hits"]["items"]
+      );
+      
+      console.log(response.data['data']['summary']['total']);
+      setTotalScholarships(response.data['data']['summary']['total'])
+    } catch (error) {
+      console.error("Error fetching scheme data:", error);
+    }
+  };
+  useEffect(() => {
     fetchData();
   }, [scholarshipsContext.index]); // Empty dependency array ensures the effect runs only once on mount
 
@@ -198,10 +199,10 @@ export default function Home() {
             <li>
               <div
                 href="#"
-                className="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180 cursor-pointer"
-                onClick={handlePrePageClick}
+                className={`inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180 ${pageNo != 1 ? 'cursor-pointer' : ''}`}
+                onClick={handlePrePageClick} 
               >
-                <span className="sr-only">Prev Page</span>
+                <span className="sr-only"  >Prev Page</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-3 w-3"
@@ -229,7 +230,7 @@ export default function Home() {
             <li>
               <div
                 
-                className="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180 cursor-pointer"
+                className={`inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180 ${pageNo != Math.ceil(totalScholarships/10) ? 'cursor-pointer' : ''}`}
                 onClick={handleNextPageClick}
               >
                 <span className="sr-only">Next Page</span>

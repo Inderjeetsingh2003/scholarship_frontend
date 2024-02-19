@@ -1,6 +1,21 @@
 import React from "react";
 import axios from "axios";
 import { ScholarshipContext } from "../context/main";
+
+// import { Skeleton } from "@/components/ui/skeleton"
+ 
+// function SkeletonCard() {
+//   return (
+//     <div className="flex flex-col space-y-3">
+//       <Skeleton className="h-full w-full rounded-xl" />
+//       <div className="space-y-2">
+//         <Skeleton className="h-4 w-[250px]" />
+//         <Skeleton className="h-4 w-[200px]" />
+//       </div>
+//     </div>
+//   )
+// }
+
 export default function ScholarshipDetail() {
   const [scholarshipData, setScholarshipData] = React.useState();
   const scholarshipsContext = React.useContext(ScholarshipContext);
@@ -15,7 +30,7 @@ export default function ScholarshipDetail() {
         // Add other data properties as needed
       };
       // const url = `https://scheme-scraper.vercel.app`;
-      const url = `https://www.myscheme.gov.in/_next/data/btkM6WlNInxFxNQWXhlj1/en/schemes/${scholarshipsContext.sName}.json`
+      const url = `https://scheme-scraper.vercel.app/`
       const response = await axios.post(url, dataToSend);
       console.log(response.data);
       setScholarshipData(response.data['data']['details']);
